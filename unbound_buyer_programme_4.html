@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carbon Markets Buyer Programme — Unbound Summits</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #0A3143;   /* Papillio navy  */
+    --paper:      #F4F9F7;   /* off-white tinted green */
+    --moss:       #36986C;   /* Papillio teal-green    */
+    --sage:       #5CB98A;   /* lighter teal           */
+    --lime:       #4BAE82;   /* Papillio logo green, readable accent */
+    --blue:       #2381A2;   /* Papillio sky-blue       */
+    --blue-light: #D0E9F2;   /* tint for backgrounds    */
+    --mist:       #D6EDE4;   /* pale green tint         */
+    --cream:      #EBF5F0;   /* slide bg variant        */
+    --gold:       #4BAE82;   /* repurposed: lime as accent */
+    --gold-light: #B8DFD0;   /* teal-green tint          */
+    --rust:       #2381A2;   /* repurposed: blue for contrast */
+    --border:     rgba(10,49,67,0.12);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Montserrat',sans-serif; background:var(--paper); color:var(--ink); overflow-x:hidden; }
+
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:var(--ink); display:flex; align-items:center; height:52px; border-bottom:2px solid var(--moss);
+  }
+  .nav-brand {
+    padding:0 24px; font-family:'DM Mono',monospace; font-size:11px;
+    letter-spacing:0.12em; color:var(--gold); text-transform:uppercase;
+    border-right:1px solid rgba(255,255,255,0.1); height:100%;
+    display:flex; align-items:center; flex-shrink:0;
+  }
+  .nav-tabs { display:flex; height:100%; overflow-x:auto; scrollbar-width:none; }
+  .nav-tabs::-webkit-scrollbar { display:none; }
+  .nav-tab {
+    padding:0 20px; font-size:12px; letter-spacing:0.06em;
+    color:rgba(255,255,255,0.45); cursor:pointer; border:none;
+    background:none; height:100%; display:flex; align-items:center;
+    white-space:nowrap; transition:all 0.2s;
+    border-bottom:2px solid transparent; font-family:'Montserrat',sans-serif; font-weight:500;
+  }
+  .nav-tab:hover { color:rgba(255,255,255,0.85); }
+  .nav-tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+  .nav-page-indicator {
+    margin-left:auto; padding:0 24px;
+    font-family:'DM Mono',monospace; font-size:11px;
+    color:rgba(255,255,255,0.3); flex-shrink:0;
+  }
+
+  .slides-container { margin-top:52px; }
+  .slide {
+    display:none; min-height:calc(100vh - 52px);
+    padding:64px 88px; animation:fadeIn 0.35s ease;
+    flex-direction:column;
+  }
+  .slide.active { display:flex; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+  .eyebrow {
+    font-family:'DM Mono',monospace; font-size:11px;
+    letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--gold); margin-bottom:20px;
+  }
+  .eyebrow.light { color:rgba(255,255,255,0.4); }
+
+  /* BIG STAT DISPLAY */
+  .stat-hero {
+    font-family:'Playfair Display',serif; font-weight:900;
+    line-height:1; color:var(--gold);
+  }
+
+  /* SLIDE NAV */
+  .slide-nav-arrows {
+    position:fixed; bottom:28px; right:32px;
+    display:flex; gap:8px; z-index:200;
+  }
+  .arrow-btn {
+    width:40px; height:40px; background:var(--ink);
+    border:1px solid rgba(255,255,255,0.15); border-radius:50%;
+    color:#fff; font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:all 0.2s;
+  }
+  .arrow-btn:hover { background:var(--moss); border-color:var(--moss); }
+  .arrow-btn:disabled { opacity:0.2; cursor:default; }
+
+  /* ====== SLIDE 1: TITLE ====== */
+  #slide-1 { background:var(--ink); color:#fff; justify-content:center; overflow:hidden; position:relative; padding:0; }
+  #slide-1::before {
+    content:''; position:absolute; top:0; right:0;
+    width:48%; height:100%;
+    background:linear-gradient(135deg,#4BAE82 0%,#0A3143 100%);
+    clip-path:polygon(14% 0,100% 0,100% 100%,0 100%);
+  }
+  .title-layout {
+    display:grid; grid-template-columns:1fr 1fr;
+    width:100%; height:100%; align-items:center;
+    position:relative; z-index:1; padding:64px 88px;
+  }
+  .title-left { padding-right:48px; }
+  .title-hed {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(38px,4.5vw,64px);
+    font-weight:900; line-height:1.06; color:#fff; margin-bottom:24px;
+  }
+  .title-sub { font-size:16px; color:rgba(255,255,255,0.5); line-height:1.7; max-width:420px; }
+  .title-meta {
+    margin-top:44px; padding-top:24px;
+    border-top:1px solid rgba(255,255,255,0.1);
+    display:flex; gap:36px;
+  }
+  .title-meta-item { font-family:'DM Mono',monospace; font-size:11px; color:rgba(255,255,255,0.3); }
+  .title-meta-item span { color:rgba(255,255,255,0.75); display:block; margin-top:4px; }
+  .title-right { display:flex; flex-direction:column; gap:20px; padding-left:32px; }
+  .t-stat {
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+    border-radius:4px; padding:22px 26px;
+  }
+  .t-stat-num {
+    font-family:'Playfair Display',serif; font-size:40px;
+    font-weight:700; color:var(--lime); line-height:1; margin-bottom:8px;
+  }
+  .t-stat-label { font-size:12px; color:rgba(255,255,255,0.4); line-height:1.5; }
+
+  /* ====== SLIDE 2: THE PROBLEM ====== */
+  #slide-2 { background:var(--paper); justify-content:center; }
+  .s2-layout { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; flex:1; }
+  .s2-left { }
+  .s2-headline {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(32px,3.5vw,52px);
+    font-weight:700; line-height:1.1; margin-bottom:32px;
+  }
+  .s2-headline em { color:var(--moss); font-style:normal; }
+  .s2-points { display:flex; flex-direction:column; gap:16px; }
+  .s2-point {
+    padding:18px 22px; background:#fff;
+    border:1px solid var(--border); border-radius:4px;
+    border-left:3px solid var(--lime);
+  }
+  .s2-point-text { font-size:15px; line-height:1.55; color:rgba(13,17,23,0.75); }
+  .s2-point-text strong { color:var(--ink); display:block; margin-bottom:3px; font-size:15px; }
+  .s2-right { }
+  .ratio-block {
+    background:var(--ink); border-radius:4px; padding:40px;
+    color:#fff; text-align:center;
+  }
+  .ratio-row { display:flex; align-items:center; justify-content:center; gap:32px; margin:24px 0; }
+  .ratio-num {
+    font-family:'Playfair Display',serif;
+    font-size:64px; font-weight:900; line-height:1;
+  }
+  .ratio-arrow { font-size:28px; color:rgba(255,255,255,0.2); }
+  .ratio-caption { font-size:12px; color:rgba(255,255,255,0.35); margin-top:4px; }
+  .ratio-note {
+    font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6;
+    margin-top:20px; padding-top:20px;
+    border-top:1px solid rgba(255,255,255,0.1);
+  }
+  .ratio-note em { color:var(--gold); font-style:normal; }
+
+  /* ====== SLIDE 3: PHILOSOPHY ====== */
+  #slide-3 { background:var(--ink); color:#fff; justify-content:center; }
+  .s3-hed {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(32px,3.5vw,52px);
+    font-weight:700; color:#fff; margin-bottom:48px; line-height:1.1;
+  }
+  .s3-hed em { color:var(--gold-light); font-style:normal; }
+  .s3-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .s3-card {
+    background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1);
+    border-radius:4px; padding:32px 28px;
+  }
+  .s3-num {
+    font-family:'Playfair Display',serif; font-size:56px;
+    font-weight:700; color:rgba(255,255,255,0.1); line-height:1; margin-bottom:20px;
+  }
+  .s3-title {
+    font-family:'Playfair Display',serif; font-size:20px;
+    font-weight:700; color:var(--lime); margin-bottom:12px; line-height:1.3;
+  }
+  .s3-text { font-size:14px; line-height:1.65; color:rgba(255,255,255,0.6); }
+  .s3-quote {
+    margin-top:36px; padding:24px 32px;
+    border-left:3px solid var(--lime);
+    background:rgba(255,255,255,0.05); border-radius:0 4px 4px 0;
+    font-family:'Playfair Display',serif; font-style:italic;
+    font-size:16px; color:rgba(255,255,255,0.75); line-height:1.65;
+  }
+  .s3-quote cite {
+    display:block; margin-top:10px;
+    font-family:'DM Mono',monospace; font-size:11px;
+    font-style:normal; color:var(--lime); letter-spacing:0.08em;
+  }
+
+  /* ====== SLIDE 4: BUYER SEGMENTS ====== */
+  #slide-4 { background:var(--cream); justify-content:center; }
+  .s4-hed {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(30px,3vw,46px);
+    font-weight:700; line-height:1.1; margin-bottom:40px;
+  }
+  .s4-hed em { color:var(--moss); font-style:normal; }
+  .s4-tiers { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .s4-tier {
+    border-radius:4px; overflow:hidden;
+    border:1px solid var(--border);
+  }
+  .s4-tier-head {
+    padding:20px 24px; background:var(--ink); color:#fff;
+  }
+  .s4-tier-name {
+    font-family:'Playfair Display',serif; font-size:22px;
+    font-weight:700; color:#fff; margin-bottom:4px;
+  }
+  .s4-tier-tag {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.1em; color:rgba(255,255,255,0.5);
+    text-transform:uppercase;
+  }
+  .s4-tier-head.gold { background:var(--lime); }
+  .s4-tier-head.gold .s4-tier-name { color:var(--ink); font-weight:700; }
+  .s4-tier-head.gold .s4-tier-tag { color:rgba(10,49,67,0.6); }
+  .s4-tier-body { padding:22px 24px; background:#fff; }
+  .s4-need {
+    font-size:13px; font-weight:600; color:var(--ink);
+    text-transform:uppercase; letter-spacing:0.06em;
+    margin-bottom:12px; font-family:'DM Mono',monospace;
+  }
+  .s4-bullets { list-style:none; display:flex; flex-direction:column; gap:9px; }
+  .s4-bullets li {
+    font-size:14px; line-height:1.5; color:rgba(13,17,23,0.7);
+    padding-left:16px; position:relative;
+  }
+  .s4-bullets li::before {
+    content:''; position:absolute; left:0; top:8px;
+    width:5px; height:5px; border-radius:50%; background:var(--moss); opacity:0.85;
+  }
+  .s4-metric {
+    margin-top:16px; padding-top:14px;
+    border-top:1px solid var(--border);
+    font-size:12px; color:rgba(13,17,23,0.45);
+    font-style:italic; line-height:1.5;
+  }
+
+  /* ====== SLIDE 5: TIMELINE ====== */
+  #slide-5 { background:var(--cream); justify-content:center; }
+  .s5-hed {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(30px,3vw,46px);
+    font-weight:700; line-height:1.1; margin-bottom:40px;
+  }
+  .s5-hed em { color:var(--moss); font-style:normal; }
+  .tl { display:flex; flex-direction:column; gap:0; }
+  .tl-row {
+    display:grid; grid-template-columns:120px 32px 1fr;
+    gap:0 20px; padding:22px 0;
+    border-bottom:1px solid var(--border);
+    align-items:start;
+  }
+  .tl-row:last-child { border-bottom:none; }
+  .tl-date {
+    font-family:'DM Mono',monospace; font-size:11px;
+    color:var(--moss); letter-spacing:0.07em;
+    padding-top:3px; text-align:right; line-height:1.5;
+  }
+  .tl-spine { display:flex; flex-direction:column; align-items:center; }
+  .tl-dot {
+    width:14px; height:14px; border-radius:50%;
+    background:var(--moss); border:3px solid var(--cream);
+    flex-shrink:0; margin-top:3px;
+  }
+  .tl-dot.highlight { background:var(--gold); border-color:var(--paper); }
+  .tl-stem { width:2px; background:var(--border); flex:1; margin-top:4px; min-height:32px; }
+  .tl-body {}
+  .tl-phase {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--moss); margin-bottom:5px;
+  }
+  .tl-phase.gold { color:var(--lime); }
+  .tl-title {
+    font-family:'Playfair Display',serif; font-size:19px;
+    font-weight:700; color:var(--ink); margin-bottom:10px;
+  }
+  .tl-tags { display:flex; flex-wrap:wrap; gap:7px; }
+  .tl-tag {
+    font-size:12px; font-weight:500; padding:4px 11px;
+    border-radius:2px; background:rgba(45,74,62,0.09); color:var(--moss);
+  }
+  .tl-tag.key { background:var(--ink); color:var(--gold); }
+
+  /* ====== SLIDE 6: MARKET INTEL ====== */
+  #slide-6 { background:var(--ink); color:#fff; padding:48px 72px; }
+  .s6-hed {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(28px,3vw,44px);
+    font-weight:700; color:#fff; margin-bottom:32px; line-height:1.1;
+  }
+  .s6-hed em { color:var(--gold-light); font-style:normal; }
+  .dash-layout { display:grid; grid-template-columns:260px 1fr; gap:28px; flex:1; }
+  .dash-side { display:flex; flex-direction:column; gap:14px; }
+  .dash-flabel {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.12em; color:rgba(255,255,255,0.3);
+    text-transform:uppercase; margin-bottom:3px;
+  }
+  .dash-sel {
+    width:100%; background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12); border-radius:4px;
+    padding:10px 14px; font-size:13px; color:#fff;
+    font-family:'Montserrat',sans-serif; cursor:pointer;
+    outline:none; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 12px center; padding-right:36px;
+  }
+  .dash-sel option { background:#1a2630; }
+  .dash-sel:focus { border-color:var(--gold); }
+  .dash-insight {
+    background:rgba(54,152,108,0.1); border:1px solid rgba(54,152,108,0.25);
+    border-radius:4px; padding:16px; margin-top:4px; flex:1;
+  }
+  .dash-insight-label {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.1em; color:var(--lime); text-transform:uppercase; margin-bottom:10px;
+  }
+  .dash-insight-text { font-size:12px; line-height:1.7; color:rgba(255,255,255,0.6); }
+  .dash-insight-text strong { color:rgba(255,255,255,0.9); }
+  .dash-main { display:flex; flex-direction:column; gap:18px; }
+  .kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .kpi {
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08);
+    border-radius:4px; padding:18px 20px;
+  }
+  .kpi-val {
+    font-family:'Playfair Display',serif; font-size:28px;
+    font-weight:700; color:var(--gold); line-height:1; margin-bottom:7px;
+  }
+  .kpi-val.green { color:var(--lime); }
+  .kpi-val.amber { color:var(--blue); }
+  .kpi-label { font-size:11px; color:rgba(255,255,255,0.38); line-height:1.45; }
+  .chart-area {
+    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+    border-radius:4px; padding:22px; flex:1;
+  }
+  .chart-title {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.1em; color:rgba(255,255,255,0.35);
+    text-transform:uppercase; margin-bottom:18px;
+  }
+  .bar-chart { display:flex; gap:14px; align-items:flex-end; height:140px; }
+  .bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; }
+  .bar { width:100%; border-radius:2px 2px 0 0; }
+  .bar-val { font-size:11px; color:rgba(255,255,255,0.6); font-weight:600; }
+  .bar-lbl { font-size:10px; color:rgba(255,255,255,0.3); text-align:center; line-height:1.3; }
+  .trend-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .trend-card {
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07);
+    border-radius:4px; padding:18px 20px;
+  }
+  .trend-title {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.1em; color:rgba(255,255,255,0.3);
+    text-transform:uppercase; margin-bottom:14px;
+  }
+  .trend-item { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+  .trend-lbl { font-size:11px; color:rgba(255,255,255,0.45); min-width:100px; }
+  .trend-track { flex:1; height:5px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
+  .trend-fill { height:100%; border-radius:3px; background:var(--moss); }
+  .trend-fill.gold { background:var(--gold); }
+  .trend-fill.rust { background:var(--rust); }
+  .trend-pct { font-size:11px; color:rgba(255,255,255,0.65); font-weight:600; min-width:50px; text-align:right; }
+
+  /* ====== SLIDE 7: WHY ME ====== */
+  #slide-7 { background:#F4F9F7; justify-content:center; }
+  .s7-hed {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(30px,3vw,46px);
+    font-weight:700; line-height:1.1; margin-bottom:40px;
+  }
+  .s7-hed em { color:var(--moss); font-style:normal; }
+  .s7-layout { display:grid; grid-template-columns:1fr 1fr; gap:40px; flex:1; }
+  .s7-strengths { display:flex; flex-direction:column; gap:18px; }
+  .s7-card {
+    display:flex; flex-direction:column; gap:8px;
+    padding:22px 24px; background:#fff;
+    border:1px solid var(--border); border-radius:4px;
+  }
+  .s7-icon {
+    width:44px; height:44px; background:var(--moss); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0;
+  }
+  .s7-card-title {
+    font-family:'Playfair Display',serif; font-size:16px;
+    font-weight:700; color:var(--ink); margin-bottom:6px;
+  }
+  .s7-card-text { font-size:13px; line-height:1.6; color:rgba(13,17,23,0.6); }
+  .s7-right { display:flex; flex-direction:column; gap:20px; }
+  .s7-why {
+    background:var(--ink); color:#fff; border-radius:4px; padding:28px;
+  }
+  .s7-why h3 {
+    font-family:'Playfair Display',serif; font-size:20px;
+    font-weight:700; color:var(--lime); margin-bottom:16px;
+  }
+  .s7-why-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .s7-why-list li {
+    font-size:13px; line-height:1.6; color:rgba(255,255,255,0.7);
+    padding-left:20px; position:relative;
+  }
+  .s7-why-list li::before { content:'→'; position:absolute; left:0; color:var(--lime); }
+  .s7-note {
+    border:1px solid var(--border); border-radius:4px; padding:22px; background:#fff;
+  }
+  .s7-note-label {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.1em; color:rgba(13,17,23,0.35);
+    text-transform:uppercase; margin-bottom:10px;
+  }
+  .s7-note-text { font-size:13px; line-height:1.7; color:rgba(13,17,23,0.6); }
+
+  /* ====== SLIDE 8: NEXT STEPS ====== */
+  #slide-8 { background:var(--ink); color:#fff; justify-content:center; }
+  .s8-hed {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(30px,3vw,46px);
+    font-weight:700; color:#fff; margin-bottom:40px; line-height:1.1;
+  }
+  .s8-hed em { color:var(--gold-light); font-style:normal; }
+  .s8-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  .s8-card {
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    border-radius:4px; padding:26px;
+  }
+  .s8-phase {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--lime); margin-bottom:14px;
+  }
+  .s8-title {
+    font-family:'Playfair Display',serif; font-size:20px;
+    font-weight:700; color:#fff; margin-bottom:16px; line-height:1.2;
+  }
+  .s8-list { list-style:none; display:flex; flex-direction:column; gap:9px; }
+  .s8-list li {
+    font-size:13px; line-height:1.55; color:rgba(255,255,255,0.55);
+    padding-left:16px; position:relative;
+  }
+  .s8-list li::before {
+    content:''; position:absolute; left:0; top:7px;
+    width:5px; height:5px; border-radius:50%; background:var(--lime);
+  }
+  .s8-close {
+    margin-top:36px; padding-top:24px;
+    border-top:1px solid rgba(255,255,255,0.1);
+    font-family:'Playfair Display',serif; font-style:italic;
+    font-size:17px; color:rgba(255,255,255,0.4); text-align:center;
+  }
+  .s8-close strong { color:var(--gold); font-style:normal; }
+
+  /* ====== SLIDE 9: QUESTIONS ====== */
+  #slide-9 { background:var(--ink); color:#fff; justify-content:center; }
+  .s9-hed {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(30px,3vw,46px);
+    font-weight:700; color:#fff; margin-bottom:40px; line-height:1.1;
+  }
+  .s9-hed em { color:var(--gold-light); font-style:normal; }
+  .s9-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; flex:1; align-content:start; }
+  .s9-card {
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    border-radius:4px; padding:22px 24px;
+  }
+  .s9-category {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--lime); margin-bottom:12px;
+  }
+  .s9-q {
+    font-size:15px; font-weight:600; color:#fff;
+    line-height:1.4; margin-bottom:8px;
+  }
+  .s9-context { font-size:12px; color:rgba(255,255,255,0.45); line-height:1.6; }
+  .s9-big {
+    margin-top:22px; padding:20px 26px;
+    background:rgba(54,152,108,0.1); border:1px solid rgba(54,152,108,0.25);
+    border-radius:4px;
+  }
+  .s9-big-label {
+    font-family:'DM Mono',monospace; font-size:10px;
+    letter-spacing:0.1em; color:var(--gold);
+    text-transform:uppercase; margin-bottom:10px;
+  }
+  .s9-big-text { font-size:14px; color:rgba(255,255,255,0.65); line-height:1.65; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Carbon Unbound</div>
+  <div class="nav-tabs" id="navTabs"></div>
+  <div class="nav-page-indicator" id="pageIndicator">1 / 9</div>
+</nav>
+
+<div class="slides-container">
+
+  <!-- SLIDE 1: TITLE -->
+  <div class="slide active" id="slide-1">
+    <div class="title-layout">
+      <div class="title-left">
+        <div class="eyebrow">Carbon Markets Development</div>
+        <div class="title-hed">Building a Market,<br>Not Just an Event</div>
+        <div class="title-sub">A year-round buyer engagement programme that turns conference momentum into procurement readiness.</div>
+        <div class="title-meta">
+          <div class="title-meta-item">Prepared by <span>Josh Eid-Ries</span></div>
+          <div class="title-meta-item">Date <span>June 2026</span></div>
+          <div class="title-meta-item">Pilot <span>Carbon Unbound Europe, Oct 20–21 2026</span></div>
+        </div>
+      </div>
+      <div class="title-right">
+        <div class="t-stat">
+          <div class="t-stat-num">~10:1</div>
+          <div class="t-stat-label">Estimated demand-to-supply ratio (Unbound internal benchmark)</div>
+        </div>
+        <div class="t-stat">
+          <div class="t-stat-num">6,000</div>
+          <div class="t-stat-label">Organisations in Unbound's database</div>
+        </div>
+        <div class="t-stat">
+          <div class="t-stat-num">150</div>
+          <div class="t-stat-label">Existing warm buyer relationships</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: THE PROBLEM -->
+  <div class="slide" id="slide-2">
+    <div class="s2-layout">
+      <div class="s2-left">
+        <div class="eyebrow">01 / The Problem</div>
+        <div class="s2-headline">Good events.<br><em>No continuity.</em></div>
+        <div class="s2-points">
+          <div class="s2-point">
+            
+            <div class="s2-point-text"><strong>No momentum between events</strong>Buyers leave energised, re-enter cold. There is no structured pathway from interested to procuring.</div>
+          </div>
+          <div class="s2-point">
+            
+            <div class="s2-point-text"><strong>One-size workshop design</strong>Lululemon and Microsoft in the same room, getting the same session. One feels overwhelmed. One disengages.</div>
+          </div>
+          <div class="s2-point">
+            
+            <div class="s2-point-text"><strong>Market growing, but not maturing</strong>CDR credit retirements fell 7% in 2025 despite a 227% surge in stated climate commitments. Buyer hesitation is the bottleneck.</div>
+          </div>
+        </div>
+      </div>
+      <div class="s2-right">
+        <div class="ratio-block">
+          <div class="eyebrow light">The gap to close</div>
+          <div class="ratio-row">
+            <div>
+              <div class="ratio-num" style="color:var(--rust);">~10:1</div>
+              <div class="ratio-caption">Today (Unbound estimate)</div>
+            </div>
+            <div class="ratio-arrow">→</div>
+            <div>
+              <div class="ratio-num" style="color:var(--gold);">7:1?</div>
+              <div class="ratio-caption">Aspirational target</div>
+            </div>
+          </div>
+          <div class="ratio-note">
+            Demand-to-supply ratio is Elliot's working estimate. Worth aligning on a shared <em>definition and measurement method</em> with Oli as a first step.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: PHILOSOPHY -->
+  <div class="slide" id="slide-3">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+      <div class="eyebrow" style="color:rgba(255,255,255,0.4);">02 / Philosophy</div>
+      <div class="s3-hed">Three principles.<br>Everything flows from <em>these.</em></div>
+      <div class="s3-grid">
+        <div class="s3-card">
+          <div class="s3-num">01</div>
+          <div class="s3-title">Segment by maturity, not sector</div>
+          <div class="s3-text">Procurement stage determines what a buyer needs next. Sector is secondary.</div>
+        </div>
+        <div class="s3-card">
+          <div class="s3-num">02</div>
+          <div class="s3-title">Relationships before transactions</div>
+          <div class="s3-text">Nobody signs an offtake after a keynote. They sign after trust is built, peer-to-peer.</div>
+        </div>
+        <div class="s3-card">
+          <div class="s3-num">03</div>
+          <div class="s3-title">Events feed the year; the year feeds events</div>
+          <div class="s3-text">What happens between conferences determines what is possible when everyone is in the room.</div>
+        </div>
+      </div>
+      <div class="s3-quote">
+        OSCAR Contracts is the template: a workshop surfaces a shared pain, the right people connect, new market infrastructure is born.
+        <cite>Carbon Unbound Buyer Workshop, 2025</cite>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: BUYER TIERS -->
+  <div class="slide" id="slide-4">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+      <div class="eyebrow">03 / Buyer Architecture</div>
+      <div class="s4-hed">Three tiers.<br>Three distinct <em>programmes.</em></div>
+      <div class="s4-tiers">
+        <div class="s4-tier">
+          <div class="s4-tier-head">
+            <div class="s4-tier-name">Explorer</div>
+            <div class="s4-tier-tag">New entrant</div>
+          </div>
+          <div class="s4-tier-body">
+            <div class="s4-need">They need</div>
+            <ul class="s4-bullets">
+              <li>Demystification, not pitches</li>
+              <li>Peer exposure to buyers one step ahead</li>
+              <li>A safe space to ask basic questions</li>
+            </ul>
+            <div class="s4-metric">Win: first meaningful supplier conversation initiated</div>
+          </div>
+        </div>
+        <div class="s4-tier">
+          <div class="s4-tier-head gold" style="color:var(--ink);">
+            <div class="s4-tier-name">Procurer</div>
+            <div class="s4-tier-tag">Active buyer</div>
+          </div>
+          <div class="s4-tier-body">
+            <div class="s4-need">They need</div>
+            <ul class="s4-bullets">
+              <li>Deal flow and vetted supplier access</li>
+              <li>MRV and contract confidence</li>
+              <li>Closed-door rooms to move fast</li>
+            </ul>
+            <div class="s4-metric">Win: purchase commitment or LOI within 6 months</div>
+          </div>
+        </div>
+        <div class="s4-tier">
+          <div class="s4-tier-head" style="background:#2381A2;color:#fff;">
+            <div class="s4-tier-name">Leader</div>
+            <div class="s4-tier-tag" style="color:rgba(255,255,255,0.4);">Sophisticated buyer</div>
+          </div>
+          <div class="s4-tier-body">
+            <div class="s4-need">They need</div>
+            <ul class="s4-bullets">
+              <li>A platform, not a programme</li>
+              <li>Co-design and hosting opportunities</li>
+              <li>Influence on market direction</li>
+            </ul>
+            <div class="s4-metric">Win: repeat hosting, peer referrals into lower tiers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: TIMELINE -->
+  <div class="slide" id="slide-5">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+      <div class="eyebrow">04 / Roadmap</div>
+      <div class="s5-hed">June to October:<br>the <em>pilot sprint</em></div>
+      <div class="tl">
+        <div class="tl-row">
+          <div class="tl-date">Jun – Jul<br>Weeks 1–6</div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-stem"></div></div>
+          <div class="tl-body">
+            <div class="tl-phase">Phase 1 / Foundation</div>
+            <div class="tl-title">Relationship Audit and Segmentation</div>
+            <div class="tl-tags">
+              <span class="tl-tag key">Reactivate 150 warm buyers</span>
+              <span class="tl-tag key">Map all to tier</span>
+              <span class="tl-tag">Define European target list</span>
+              <span class="tl-tag">CRM setup</span>
+            </div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-date">Jul – Aug<br>Weeks 7–12</div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-stem"></div></div>
+          <div class="tl-body">
+            <div class="tl-phase">Phase 2 / Acquisition</div>
+            <div class="tl-title">European Buyer Pipeline Build</div>
+            <div class="tl-tags">
+              <span class="tl-tag key">Outreach to European corporates</span>
+              <span class="tl-tag key">Institutional investor pipeline</span>
+              <span class="tl-tag">Qualify by tier and timeline</span>
+              <span class="tl-tag">Identify workshop hosts</span>
+            </div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-date">Aug – Sep<br>Weeks 12–18</div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-stem"></div></div>
+          <div class="tl-body">
+            <div class="tl-phase">Phase 3 / Programme Design</div>
+            <div class="tl-title">Workshop Architecture and Matchmaking</div>
+            <div class="tl-tags">
+              <span class="tl-tag key">Design tiered workshop tracks</span>
+              <span class="tl-tag key">Curate closed-door session</span>
+              <span class="tl-tag">Brief production on audience makeup</span>
+            </div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-date">Oct 20–21<br>2026</div>
+          <div class="tl-spine"><div class="tl-dot highlight"></div></div>
+          <div class="tl-body">
+            <div class="tl-phase gold">Carbon Unbound Europe / Oct 20–21 2026</div>
+            <div class="tl-title">Execute, Observe, Capture</div>
+            <div class="tl-tags">
+              <span class="tl-tag key">Run tiered workshops</span>
+              <span class="tl-tag key">Track every buyer outcome</span>
+              <span class="tl-tag">Feed insights back to production</span>
+              <span class="tl-tag">Find the next OSCAR</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: MARKET INTEL DASHBOARD -->
+  <div class="slide" id="slide-6">
+    <div class="eyebrow" style="color:var(--gold);">05 / Market Intelligence</div>
+    <div class="s6-hed">CDR buyer trends and<br><em>market signals</em></div>
+    <div class="dash-layout">
+      <div class="dash-side">
+        <div>
+          <div class="dash-flabel">CDR pathway</div>
+          <select class="dash-sel" id="pathwaySel" onchange="updateDash()">
+            <option value="all">All Pathways</option>
+            <option value="biochar">Biochar</option>
+            <option value="erw">Enhanced Rock Weathering</option>
+            <option value="beccs">BECCS</option>
+            <option value="dac">Direct Air Capture</option>
+          </select>
+        </div>
+        <div>
+          <div class="dash-flabel">Buyer segment</div>
+          <select class="dash-sel" id="segSel" onchange="updateDash()">
+            <option value="all">All Segments</option>
+            <option value="explorer">Explorer (New)</option>
+            <option value="procurer">Procurer (Active)</option>
+            <option value="leader">Leader (Sophisticated)</option>
+          </select>
+        </div>
+        <div>
+          <div class="dash-flabel">Market context</div>
+          <select class="dash-sel" id="ctxSel" onchange="updateDash()">
+            <option value="vcm">Voluntary Carbon Markets</option>
+            <option value="compliance">Compliance / ETS Overlap</option>
+            <option value="frontier">Frontier Buyer Coalitions</option>
+          </select>
+        </div>
+        <div class="dash-insight" style="flex:1;">
+          <div class="dash-insight-label">Market signal</div>
+          <div class="dash-insight-text" id="insightTxt">Select filters to surface targeted intelligence for your buyer engagement strategy.</div>
+        </div>
+      </div>
+      <div class="dash-main">
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-val">$155–187</div><div class="kpi-label">Biochar price gap: buyers see $155/t as expensive; suppliers need $187/t to profit (CDR.fyi 2025)</div></div>
+          <div class="kpi"><div class="kpi-val green">50%</div><div class="kpi-label">Of H1 2025 CDR buyers were first-time participants (Allied Offsets)</div></div>
+          <div class="kpi"><div class="kpi-val amber">6%</div><div class="kpi-label">CDR's share of total VCM retirements in 2025 (Carbon Direct 2026)</div></div>
+          <div class="kpi"><div class="kpi-val">22 days</div><div class="kpi-label">Biochar time from issuance to retirement, down from 95 days in 2021</div></div>
+        </div>
+        <div class="chart-area">
+          <div class="chart-title">CDR purchase volume mix by pathway, H1 2025 (source: Allied Offsets)</div>
+          <div class="bar-chart">
+            <div class="bar-col"><div class="bar-val">~94%</div><div class="bar" style="height:130px;background:var(--moss)"></div><div class="bar-lbl">Biomass CDR<br>(biochar/BECCS)</div></div>
+            <div class="bar-col"><div class="bar-val">Rising</div><div class="bar" style="height:40px;background:rgba(74,124,106,0.6)"></div><div class="bar-lbl">ERW<br>(15%→42% by 2030)</div></div>
+            <div class="bar-col"><div class="bar-val">Early</div><div class="bar" style="height:18px;background:rgba(74,124,106,0.4)"></div><div class="bar-lbl">DAC<br>(high cost)</div></div>
+            <div class="bar-col"><div class="bar-val">Nascent</div><div class="bar" style="height:9px;background:rgba(74,124,106,0.25)"></div><div class="bar-lbl">Marine CDR<br>(emerging)</div></div>
+          </div>
+        </div>
+        <div class="trend-row">
+          <div class="trend-card">
+            <div class="trend-title">Top buyer blockers (Sylvera 2025)</div>
+            <div class="trend-item"><div class="trend-lbl">MRV complexity</div><div class="trend-track"><div class="trend-fill" style="width:82%"></div></div><div class="trend-pct">Top blocker</div></div>
+            <div class="trend-item"><div class="trend-lbl">Price expectations</div><div class="trend-track"><div class="trend-fill gold" style="width:77%"></div></div><div class="trend-pct">77% cite</div></div>
+            <div class="trend-item"><div class="trend-lbl">Registry confusion</div><div class="trend-track"><div class="trend-fill" style="width:65%"></div></div><div class="trend-pct">Widespread</div></div>
+            <div class="trend-item"><div class="trend-lbl">Contract complexity</div><div class="trend-track"><div class="trend-fill rust" style="width:50%"></div></div><div class="trend-pct">Improving</div></div>
+          </div>
+          <div class="trend-card">
+            <div class="trend-title">Sectors with highest buyer likelihood (AlliedOffsets model)</div>
+            <div class="trend-item"><div class="trend-lbl">Airlines / Transport</div><div class="trend-track"><div class="trend-fill gold" style="width:85%"></div></div><div class="trend-pct">High</div></div>
+            <div class="trend-item"><div class="trend-lbl">Consumer goods</div><div class="trend-track"><div class="trend-fill" style="width:78%"></div></div><div class="trend-pct">High</div></div>
+            <div class="trend-item"><div class="trend-lbl">Financial services</div><div class="trend-track"><div class="trend-fill" style="width:72%"></div></div><div class="trend-pct">Med-High</div></div>
+            <div class="trend-item"><div class="trend-lbl">Tech / Telecoms</div><div class="trend-track"><div class="trend-fill" style="width:66%"></div></div><div class="trend-pct">Med-High</div></div>
+            <div class="trend-item"><div class="trend-lbl">Industrials</div><div class="trend-track"><div class="trend-fill rust" style="width:58%"></div></div><div class="trend-pct">Medium</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: WHY ME -->
+  <div class="slide" id="slide-7">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+      <div class="eyebrow">06 / Why Me</div>
+      <div class="s7-hed">What I bring<br>to <em>this specific role</em></div>
+      <div class="s7-layout">
+        <div class="s7-strengths">
+          <div class="s7-card">
+            <div class="s7-card-title">Senior relationship architecture</div>
+            <div class="s7-card-text">I build the kind of trusted relationships that make candid conversations possible. That is what turns a buyer workshop into an OSCAR moment.</div>
+          </div>
+          <div class="s7-card">
+            <div class="s7-card-title">Bilingual: commercial and technical</div>
+            <div class="s7-card-text">I speak a corporate buyer's language and a project developer's language. That bridge is rare and exactly what this role requires.</div>
+          </div>
+          <div class="s7-card">
+            <div class="s7-card-title">Live market signal</div>
+            <div class="s7-card-text">Through Papillio and continuous conference engagement, I carry real-time intelligence across VCM, CDR, and compliance markets into every conversation.</div>
+          </div>
+        </div>
+        <div class="s7-right">
+          <div class="s7-why">
+            <h3>What this looks like in practice</h3>
+            <ul class="s7-why-list">
+              <li>Reactivating 150 warm buyers with personal conversations, not newsletters</li>
+              <li>Designing a European workshop with two tracks from day one, based on intake data</li>
+              <li>Identifying the next OSCAR: connecting the right people around a shared blocker</li>
+              <li>Feeding buyer intelligence directly back to the production team after every interaction</li>
+            </ul>
+          </div>
+          <div class="s7-note">
+            <div class="s7-note-label">On the contractor structure</div>
+            <div class="s7-note-text">The freelance model works well for how I operate. I bring the discipline of an independent operator with full team commitment. Europe is the right pilot: a defined scope, a clear outcome, and a natural point to evaluate what comes next.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: NEXT STEPS -->
+  <div class="slide" id="slide-8">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+      <div class="eyebrow" style="color:var(--gold);">07 / Next Steps</div>
+      <div class="s8-hed">Three priorities.<br><em>Weeks 1 to 14.</em></div>
+      <div class="s8-grid">
+        <div class="s8-card">
+          <div class="s8-phase">Weeks 1–3</div>
+          <div class="s8-title">Buyer Intelligence Audit</div>
+          <ul class="s8-list">
+            <li>Personal conversations with all 150 warm buyers</li>
+            <li>Map each to Explorer, Procurer, or Leader tier</li>
+            <li>Identify which 60 intent profiles need updating</li>
+            <li>Deliver a tiered buyer map by week 3</li>
+          </ul>
+        </div>
+        <div class="s8-card">
+          <div class="s8-phase">Weeks 4–10</div>
+          <div class="s8-title">European Pipeline Build</div>
+          <ul class="s8-list">
+            <li>50 target European corporates from the 6k database</li>
+            <li>Qualify by tier and procurement timeline before confirming</li>
+            <li>Identify 1 to 2 European buyer willing to host a track</li>
+          </ul>
+        </div>
+        <div class="s8-card">
+          <div class="s8-phase">Weeks 8–14</div>
+          <div class="s8-title">Workshop Architecture</div>
+          <ul class="s8-list">
+            <li>Brief production on audience makeup 6 weeks out</li>
+            <li>Design two workshop tracks based on tier data</li>
+            <li>Curate one closed-door session: 8 to 12 vetted buyers and suppliers</li>
+            <li>Define post-event follow-up protocol</li>
+          </ul>
+        </div>
+      </div>
+      <div class="s8-close">
+        The goal is not a better conference. It is a <strong>market that works better</strong> because of what Unbound enables between conferences.
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: QUESTIONS -->
+  <div class="slide" id="slide-9">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;">
+      <div class="eyebrow" style="color:var(--gold);">08 / Questions for Elliot and Oli</div>
+      <div class="s9-hed">Questions to<br><em>get us started</em></div>
+      <div class="s9-grid">
+        <div class="s9-card">
+          <div class="s9-category">Programme and data</div>
+          <div class="s9-q">How is the 10:1 ratio defined and measured?</div>
+          <div class="s9-context">Agreeing on a shared definition is the first step to making it a meaningful north star, and will shape how we track progress.</div>
+        </div>
+        <div class="s9-card">
+          <div class="s9-category">Programme and data</div>
+          <div class="s9-q">What does the 6,000-org database actually contain today?</div>
+          <div class="s9-context">What fields exist, what is missing, and what would make it a usable segmentation and outreach tool from week one?</div>
+        </div>
+        <div class="s9-card">
+          <div class="s9-category">Audience intelligence</div>
+          <div class="s9-q">What did the 60 detailed buyer intent profiles reveal?</div>
+          <div class="s9-context">What patterns emerged from the West Coast tracking? That data is the foundation for the European programme design.</div>
+        </div>
+        <div class="s9-card">
+          <div class="s9-category">Success and structure</div>
+          <div class="s9-q">What does a successful Europe pilot look like to you?</div>
+          <div class="s9-context">Shared definition of success makes it much easier to design toward it, and to evaluate what comes next.</div>
+        </div>
+        <div class="s9-card">
+          <div class="s9-category">Role clarity</div>
+          <div class="s9-q">How is time split between acquisition and programme design in the first 90 days?</div>
+          <div class="s9-context">You mentioned acquisition as the priority for Europe, with production leading on programming. Want to confirm we are aligned on where focus should live.</div>
+        </div>
+        <div class="s9-card">
+          <div class="s9-category">Contract and terms</div>
+          <div class="s9-q">What does the contractor structure look like in practice?</div>
+          <div class="s9-context">Day rate, scope, any exclusivity considerations? And how do you see this evolving if the Europe pilot lands well?</div>
+        </div>
+      </div>
+      <div class="s9-big">
+        <div class="s9-big-label">The bigger question</div>
+        <div class="s9-big-text">The 6,000-org database and the pattern data from one-to-ones could become something genuinely valuable to the industry, not just an internal tool. Is that part of the longer-term vision, and how does this role connect to it?</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="slide-nav-arrows">
+  <button class="arrow-btn" id="prevBtn" onclick="navigate(-1)" disabled>←</button>
+  <button class="arrow-btn" id="nextBtn" onclick="navigate(1)">→</button>
+</div>
+
+<script>
+const labels = ['Overview','The Problem','Philosophy','Buyer Tiers','Roadmap','Market Intel','Why Me','Next Steps','Questions'];
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+
+const tabContainer = document.getElementById('navTabs');
+labels.forEach((l,i) => {
+  const b = document.createElement('button');
+  b.className = 'nav-tab' + (i===0?' active':'');
+  b.textContent = l;
+  b.onclick = () => goTo(i);
+  tabContainer.appendChild(b);
+});
+
+function goTo(idx) {
+  slides[cur].classList.remove('active');
+  document.querySelectorAll('.nav-tab')[cur].classList.remove('active');
+  cur = idx;
+  slides[cur].classList.add('active');
+  document.querySelectorAll('.nav-tab')[cur].classList.add('active');
+  document.getElementById('pageIndicator').textContent = `${cur+1} / ${total}`;
+  document.getElementById('prevBtn').disabled = cur===0;
+  document.getElementById('nextBtn').disabled = cur===total-1;
+  document.querySelectorAll('.nav-tab')[cur].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+function navigate(d) { const n=cur+d; if(n>=0&&n<total) goTo(n); }
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') navigate(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') navigate(-1);
+});
+
+const insights = {
+  all_all_vcm:"The VCM is at a critical inflection point. CDR represents just 6% of credit retirements despite 227% growth in stated commitments. <strong>Buyer hesitation is the bottleneck</strong>, not supply capability. Year-round engagement that builds procurement confidence is the single highest-leverage intervention available to Unbound.",
+  biochar_all_vcm:"<strong>Biochar is the near-term window.</strong> Over 90% of 2025 biochar credits were sold before year-end, but supply fell 54% below projections (Supercritical). The delivery gap creates urgency for buyers to commit early. European buyers engaging now can still secure favourable forward offtake terms.",
+  erw_all_vcm:"ERW buyer interest is accelerating sharply: purchasing intentions are expected to grow from 15% to 42% of buyers by 2030 (CDR.fyi). But MRV standardisation remains the core blocker. Workshop content addressing soil carbon MRV directly will resonate strongly with this audience.",
+  dac_all_vcm:"DAC remains price-prohibitive for most corporate buyers. Investment skews heavily toward DAC despite low purchase volumes. Focus on Explorer-tier engagement only: education on the technology roadmap and long-term portfolio role, not near-term procurement facilitation.",
+  all_explorer_vcm:"Explorer-tier buyers need demystification before anything else. The biggest risk is overloading them with technical content. <strong>Format: peer-led sessions with buyers one step ahead of them</strong>, not supplier pitches. 50% of H1 2025 CDR buyers were first-timers, a strong signal that new entrant appetite is real.",
+  all_procurer_vcm:"<strong>Procurer-tier buyers are where near-term deal flow lives.</strong> They have intent and budget but face contract friction and price expectation gaps. The OSCAR Contracts model, surfacing a shared blocker and solving it in a closed room, is exactly the right programme design here.",
+  all_leader_vcm:"Leader-tier buyers (Microsoft, Google, Lloyds) are programme assets, not programme targets. Engage them as workshop hosts and case study contributors. Their participation de-risks the space for every Explorer and Procurer in the room.",
+  all_all_compliance:"EU ETS tightening and Article 6 developments from COP29 are creating a compliance-VCM overlap dynamic. Some European corporates are beginning to treat high-quality CDR credits as insurance against future compliance costs. This is a compelling framing for European buyer outreach.",
+  all_all_frontier:"Frontier and similar coalitions have set a benchmark for premium CDR procurement. Their published standards are shaping what high quality means for the broader market. Explorer-tier buyers should be introduced to these frameworks early, as a procurement confidence-builder."
+};
+
+function updateDash() {
+  const p = document.getElementById('pathwaySel').value;
+  const s = document.getElementById('segSel').value;
+  const c = document.getElementById('ctxSel').value;
+  const txt = insights[`${p}_${s}_${c}`] || insights[`all_${s}_${c}`] || insights[`${p}_all_${c}`] || insights[`all_all_${c}`] || insights['all_all_vcm'];
+  document.getElementById('insightTxt').innerHTML = txt;
+}
+</script>
+</body>
+</html>
